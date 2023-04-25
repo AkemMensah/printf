@@ -35,7 +35,7 @@ unsigned int convert_s(va_list args, buffer_t *output,
 	if (str == NULL)
 		return (_memcpy(output, null, 6));
 
-	for ( count = 0; *(str + count);)
+	for (count = 0; *(str + count);)
 		count++;
 
 	ret += print_string_width(output, flags, wid, prec, count);
