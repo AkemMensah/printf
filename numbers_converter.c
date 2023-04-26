@@ -24,8 +24,7 @@ unsigned int convert_o(va_list args, buffer_t *output,
 unsigned int convert_di(va_list args, buffer_t *output,
 		unsigned char flags, int wid, int prec, unsigned char len)
 {
-	long int f, copy;
-	unsigned int ret = 0, count = 0;
+	long int f, copy, unsigned int ret = 0, count = 0;
 	char pad, space = ' ', neg = '-', plus = '+';
 
 	if (len == LONG)
@@ -34,11 +33,8 @@ unsigned int convert_di(va_list args, buffer_t *output,
 		f = va_arg(args, int);
 	if (len == SHORT)
 		f = (short)f;
-
-	/* Handle space flag */
-	if (SPACE_FLAG == 1 && f >= 0)
+	if (SPACE_FLAG == 1 && f >= 0) /*Handle space flag */
 		ret += _memcpy(output, &space, 1);
-
 	if (prec <= 0 && NEG_FLAG == 0) /* Handle width  */
 	{
 		if (f == LONG_MIN)
@@ -52,32 +48,21 @@ unsigned int convert_di(va_list args, buffer_t *output,
 		count += (f < 0) ? 1 : 0;
 		count += (PLUS_FLAG == 1 && f >= 0) ? 1 : 0;
 		count += (SPACE_FLAG == 1 && f >= 0) ? 1 : 0;
-
-		/* Handle plus flag when zero flag is active */
-		if (ZERO_FLAG == 1 && PLUS_FLAG == 1 && f >= 0)
+		if (ZERO_FLAG == 1 && PLUS_FLAG == 1 && f >= 0)/*Handle plusflag*/
 			ret += _memcpy(output, &plus, 1);
-		/*Print negative sign when zero flag is active */
-		if (ZERO_FLAG == 1 && d < 0)
+		if (ZERO_FLAG == 1 && d < 0)/* Print neg when zero flag is active */
 			ret += _memcpy(output, &neg, 1);
-
 		pad = (ZERO_FLAG == 1) ? '0' : ' ';
 		for (wid -= count; wid > 0; wid--)
 			ret += _memcpy(output, &pad, 1);
 	}
-
-	/* Print negative sign when zero flag is not active */
-	if (ZERO_FLAG == 0 && f < 0)
+	if (ZERO_FLAG == 0 && f < 0) /* Print neg sign when zero flag is not active */
 		ret += _memcpy(output, &neg, 1);
-	/* Handle plus flag when zero flag is not active */
-	if (ZERO_FLAG == 0 && (PLUS_FLAG == 1 && f >= 0))
+	if (ZERO_FLAG == 0 && (PLUS_FLAG == 1 && f >= 0))/*Handle plusflag,zero off*/
 		ret += _memcpy(output, &plus, 1);
-
 	if (!(f == 0 && prec == 0))
-		ret += convert_sbase(output, f, "0123456789",
-				flags, 0, prec);
-
+		ret += convert_sbase(output, f, "0123456789", flags, 0, prec);
 	ret += print_neg_width(output, ret, flags, wid);
-
 	return (ret);
 }
 
